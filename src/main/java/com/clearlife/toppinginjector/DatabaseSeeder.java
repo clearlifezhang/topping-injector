@@ -23,7 +23,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         UserToppingDto randomUserTopping = userToppingGenerator.generateRandomUserTopping();
 
         RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "http://localhost:6060/redisapi/saveUserToppings"; // Replace with the appropriate API URL
+        String apiUrl = "http://data-process-redis:6060/redisapi/saveUserToppings"; // Replace with the appropriate API URL
 
         ResponseEntity<UserToppingDto> response = restTemplate.postForEntity(apiUrl, randomUserTopping, UserToppingDto.class);
         System.out.println("Created user topping: " + response.getBody());

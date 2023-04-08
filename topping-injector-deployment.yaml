@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-injector
+spec:
+  selector:
+    matchLabels:
+      app: data-injector
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: data-injector
+    spec:
+      containers:
+      - name: data-injector
+        image: clearlifezhang/topping-injector:latest
+        env:
+        - name: DATA_PROCESSOR_HOST
+          value: data-process-redis
+        - name: DATA_PROCESSOR_PORT
+          value: "6060"
+

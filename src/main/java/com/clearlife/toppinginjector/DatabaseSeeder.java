@@ -23,7 +23,17 @@ public class DatabaseSeeder implements CommandLineRunner {
         UserToppingDto randomUserTopping = userToppingGenerator.generateRandomUserTopping();
 
         RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "http://data-process-redis:6060/redisapi/saveUserToppings"; // Replace with the appropriate API URL
+        String dataProcessorHost = System.getenv("DATA_PROCESSOR_HOST");
+        if (dataProcessorHost == null || dataProcessorHost.isEmpty()) {
+            dataProcessorHost = "data-process-redis"; // Default value
+        }
+        String dataProcessorPortStr = System.getenv("DATA_PROCESSOR_PORT");
+        int dataProcessorPort = 6060; // Default value
+        if (dataProcessorPortStr != null && !dataProcessorPortStr.isEmpty()) {
+            dataProcessorPort = Integer.parseInt(dataProcessorPortStr);
+        }
+
+        String apiUrl = "http://" + dataProcessorHost+ ":" + dataProcessorPort + "/redisapi/saveUserToppings";
 
         ResponseEntity<UserToppingDto> response = restTemplate.postForEntity(apiUrl, randomUserTopping, UserToppingDto.class);
         System.out.println("Created user topping: " + response.getBody());
